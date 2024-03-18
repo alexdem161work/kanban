@@ -1,67 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { getCards } from '~/api/cards';
+import { useCardsStore } from '~/store/cardsStore';
 
-const cards = ref([]);
-
-const columns = ref([
-  {
-    row: '0',
-    title: 'ON HOLD',
-    cards: [],
-  },
-  {
-    row: '1',
-    title: 'IN PROGRESS',
-    cards: [],
-  },
-  {
-    row: '2',
-    title: 'NEEDS REVIEW',
-    cards: [],
-  },
-  {
-    row: '3',
-    title: 'APPROVED',
-    cards: [],
-  },
-]);
-
-const distributeCardsToColumns = () => {
-  cards.value.forEach((card) => {
-    const { row } = card;
-    const column = columns.value.find((col) => col.row === row);
-
-    if (column) {
-      const { id, seq_num, text } = card;
-      column.cards.push({ id, seq_num, text });
-    }
-  });
-};
+const cards = useCardsStore();
 
 const handleLoadCards = async () => {
-  cards.value = await getCards();
-  distributeCardsToColumns();
+  await cards.loadCards();
 };
 handleLoadCards();
-
-const handelAddNewCard = (newCard, row: string) => {
-  const column = columns.value.find((col) => col.row === row);
-  if (column) {
-    column.cards.push(newCard);
-  }
-};
 </script>
 
 <template>
-  <div class="kanban-container">
+  <div class="kanban-container" v-if="cards.columns.length > 0">
     <KanbanColumn
-      v-for="column in columns"
+      v-for="column in cards.columns"
       :key="column.row"
       :title="column.title"
       :row="column.row"
       :cards="column.cards"
-      @created-card="handelAddNewCard"
     />
   </div>
 </template>

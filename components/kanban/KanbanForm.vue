@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { createCard } from '~/api/cards';
+import { useCardsStore } from '~/store/cardsStore';
 
 import Form from '~/services/form';
-import BadRequestError from '~/errors/BadRequestError';
 
 interface Props {
   row: string,
 }
 
+const cards = useCardsStore();
 const emit = defineEmits(['close', 'created']);
 const props = defineProps<Props>();
 
 const formData = ref(new Form({
   row: props.row,
-  text: null,
+  text: 'null',
 }));
 
 const clearForm = () => {
@@ -27,15 +27,7 @@ const handleCancel = () => {
 };
 
 const handleAddCard = async () => {
-  try {
-    const newCard = await createCard(formData.value.getValues());
-    emit('created', newCard);
-    handleCancel();
-  } catch (error) {
-    if (error instanceof BadRequestError) {
-      formData.value.setErrors(error.getErrors());
-    }
-  }
+  await cards.createCard(formData.value.getValues());
 };
 </script>
 

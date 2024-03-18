@@ -5,7 +5,7 @@ export interface payloadType {
 }
 
 interface apiOptions {
-  method: 'GET' | 'POST' | 'DELETE',
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   payload?: payloadType,
 }
 
@@ -26,7 +26,7 @@ export const call = async (url: string, options: apiOptions = { method: 'GET' })
     headers,
   };
 
-  if (options.method === 'POST' && options.payload) {
+  if (['POST', 'PATCH'].includes(options.method) && options.payload) {
     fetchOptions.body = JSON.stringify(options.payload);
   } else if (options.payload) {
     const queryParams = new URLSearchParams(
@@ -58,6 +58,11 @@ export const post = async (
   url: string,
   payload: payloadType = {},
 ): Promise<object> => await call(url, { method: 'POST', payload });
+
+export const patch = async (
+  url: string,
+  payload: payloadType = {},
+): Promise<object> => await call(url, { method: 'PATCH', payload });
 
 export const remove = async (
   url: string,

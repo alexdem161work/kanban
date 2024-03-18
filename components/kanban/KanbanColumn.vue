@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useCardsStore } from '~/store/cardsStore';
 
 interface Props {
   title: string,
@@ -7,7 +8,7 @@ interface Props {
   cards: [],
 }
 
-const emit = defineEmits(['createdCard']);
+const cardsStore = useCardsStore();
 const props = defineProps<Props>();
 
 const shownForm = ref(false);
@@ -19,13 +20,13 @@ const handleCloseForm = () => {
   shownForm.value = false;
 }
 
-const handleBeforeCreated = (newCard) => {
-  emit('createdCard', newCard, props.row)
-};
+const handleDragEnd = () => {
+  cardsStore.shuffleEnd(props.row);
+}
 </script>
 
 <template>
-  <div class="kanban-column" :class="`kanban-column--${row}`">
+  <div class="kanban-column" :class="`kanban-column--${row}`" @drop="handleDragEnd"  @dragover.prevent>
     <div class="kanban-column__header">
       {{ title }} ({{ cards.length }})
     </div>
@@ -39,9 +40,7 @@ const handleBeforeCreated = (newCard) => {
         />
 
         <KanbanForm
-          v-show="shownForm"
           :row="row"
-          @created="handleBeforeCreated"
           @close="handleCloseForm"
         />
       </div>

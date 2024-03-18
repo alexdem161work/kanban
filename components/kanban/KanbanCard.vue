@@ -1,13 +1,20 @@
 <script setup lang="ts">
+import { useCardsStore } from '~/store/cardsStore';
+
 interface Props {
   card: {},
 }
 
-defineProps<Props>();
+const cards = useCardsStore();
+const props = defineProps<Props>();
+
+const handleDragStart = () => {
+  cards.shuffleStart(props.card);
+};
 </script>
 
 <template>
-  <div class="kanban-card">
+  <div class="kanban-card" @dragstart="handleDragStart" draggable="true">
     <div class="kanban-card__id">
       <span class="kanban-card__id-label">id: </span>
       <span class="kanban-card__id-value">{{ card.id }}</span>
