@@ -4,11 +4,13 @@ import { computed } from 'vue';
 interface Props {
   variant?: 'primary' | 'ghost',
   adaptive?: boolean,
+  type?: 'button' | 'submit' | 'reset',
 }
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'primary',
   adaptive: false,
+  type: 'button',
 });
 
 const classes = computed((): string[] => {
@@ -23,7 +25,7 @@ const classes = computed((): string[] => {
 </script>
 
 <template>
-  <button :class="classes">
+  <button :class="classes" :type="type">
     <slot/>
   </button>
 </template>

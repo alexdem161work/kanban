@@ -3,4 +3,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   css: ['~/assets/styles/application.scss'],
+
+  modules: [
+    '@pinia/nuxt',
+  ],
 });

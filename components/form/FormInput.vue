@@ -6,6 +6,7 @@ interface Props {
 
   placeholder?: string,
   type?: 'text' | 'password',
+  errors?: string[],
 }
 
 const emit = defineEmits(['update:modelValue']);
@@ -25,29 +26,51 @@ const value = computed({
 </script>
 
 <template>
-  <input
-    v-model="value"
-    :type="type"
-    :placeholder="placeholder"
-    class="form-input"
-  />
+  <div class="form-input-container">
+    <input
+      v-model="value"
+      :type="type"
+      :placeholder="placeholder"
+      class="form-input-container__input"
+    />
+
+    <div
+      v-if="errors?.length > 0"
+      class="form-input-container__errors"
+    >
+      <div
+        class="form-input-container__error"
+        v-for="error in errors"
+        :key="error"
+      >
+        {{ error }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.form-input {
-  box-sizing: border-box;
+.form-input-container {
 
-  width: 100%;
-  height: 40px;
+  &__input {
+    box-sizing: border-box;
 
-  background: #4f4f4f;
-  color: #a7a9ab;
+    width: 100%;
+    height: 40px;
 
-  border: none;
-  padding: 15px;
+    background: #4f4f4f;
+    color: #a7a9ab;
 
-  &:focus {
-    outline: none;
+    border: none;
+    padding: 15px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__errors {
+
   }
 }
 </style>

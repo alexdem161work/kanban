@@ -1,12 +1,5 @@
-<script setup lang="ts">
-defineEmits(['handleSubmit']);
-</script>
-
 <template>
-  <form
-    class="form-wrapper"
-    @submit.prevent="$emit('handleSubmit')"
-  >
+  <form class="form-wrapper">
     <fieldset class="form-wrapper__main">
       <slot/>
     </fieldset>
