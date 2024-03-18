@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import KanbanForm from "~/components/kanban/KanbanForm.vue";
-
 interface Props {
   title: string,
   type: '0' | '1' | '2' | '3',
@@ -20,8 +18,11 @@ withDefaults(defineProps<Props>(), {
 
     <div class="kanban-column__body">
       <div class="kanban-column__cards">
-        <KanbanCard/>
-        <KanbanCard/>
+        <KanbanCard
+          v-for="card in cards"
+          :key="card.id"
+          :card="card"
+        />
 
         <KanbanForm/>
       </div>

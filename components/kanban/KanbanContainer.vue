@@ -1,13 +1,61 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { getCards } from '~/api/cards';
 
+
+const cards = ref([]);
+
+const columns = ref([
+  {
+    row: '0',
+    title: 'ON HOLD',
+    cards: [],
+  },
+  {
+    row: '1',
+    title: 'IN PROGRESS',
+    cards: [],
+  },
+  {
+    row: '2',
+    title: 'NEEDS REVIEW',
+    cards: [],
+  },
+  {
+    row: '3',
+    title: 'APPROVED',
+    cards: [],
+  },
+]);
+
+const distributeCardsToColumns = () => {
+  cards.value.forEach((card) => {
+    const { row } = card;
+    const column = columns.value.find((col) => col.row === row);
+
+    if (column) {
+      const { id, seq_num, text } = card;
+      column.cards.push({ id, seq_num, text });
+    }
+  });
+};
+
+const handleLoadCards = async () => {
+  cards.value = await getCards();
+  distributeCardsToColumns();
+};
+handleLoadCards();
 </script>
 
 <template>
   <div class="kanban-container">
-    <KanbanColumn title="ON HOLD" type="0" :cards="[]"/>
-    <KanbanColumn title="IN PROGRESS" type="1" :cards="[]"/>
-    <KanbanColumn title="NEEDS REVIEW" type="2" :cards="[]"/>
-    <KanbanColumn title="APPROVED" type="3" :cards="[]"/>
+    <KanbanColumn
+      v-for="column in columns"
+      :key="column.row"
+      :title="column.title"
+      :type="column.row"
+      :cards="column.cards"
+    />
   </div>
 </template>
 

@@ -1,16 +1,20 @@
 <script setup lang="ts">
+interface Props {
+  card: {},
+}
 
+defineProps<Props>();
 </script>
 
 <template>
   <div class="kanban-card">
     <div class="kanban-card__id">
       <span class="kanban-card__id-label">id: </span>
-      <span class="kanban-card__id-value">1234314325235</span>
+      <span class="kanban-card__id-value">{{ card.id }}</span>
     </div>
 
     <div class="kanban-card__description">
-      Text
+      {{ card.text }}
     </div>
   </div>
 </template>
