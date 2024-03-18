@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { getCards } from '~/api/cards';
 
-
 const cards = ref([]);
 
 const columns = ref([
@@ -45,6 +44,13 @@ const handleLoadCards = async () => {
   distributeCardsToColumns();
 };
 handleLoadCards();
+
+const handelAddNewCard = (newCard, row: string) => {
+  const column = columns.value.find((col) => col.row === row);
+  if (column) {
+    column.cards.push(newCard);
+  }
+};
 </script>
 
 <template>
@@ -53,8 +59,9 @@ handleLoadCards();
       v-for="column in columns"
       :key="column.row"
       :title="column.title"
-      :type="column.row"
+      :row="column.row"
       :cards="column.cards"
+      @created-card="handelAddNewCard"
     />
   </div>
 </template>

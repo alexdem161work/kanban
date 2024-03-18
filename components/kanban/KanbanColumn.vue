@@ -1,17 +1,31 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 interface Props {
   title: string,
-  type: '0' | '1' | '2' | '3',
+  row: string,
   cards: [],
 }
 
-withDefaults(defineProps<Props>(), {
-  type: '0',
-});
+const emit = defineEmits(['createdCard']);
+const props = defineProps<Props>();
+
+const shownForm = ref(false);
+const handleOpenForm = () => {
+  shownForm.value = true;
+};
+
+const handleCloseForm = () => {
+  shownForm.value = false;
+}
+
+const handleBeforeCreated = (newCard) => {
+  emit('createdCard', newCard, props.row)
+};
 </script>
 
 <template>
-  <div class="kanban-column" :class="`kanban-column--${type}`">
+  <div class="kanban-column" :class="`kanban-column--${row}`">
     <div class="kanban-column__header">
       {{ title }} ({{ cards.length }})
     </div>
@@ -24,11 +38,22 @@ withDefaults(defineProps<Props>(), {
           :card="card"
         />
 
-        <KanbanForm/>
+        <KanbanForm
+          v-show="shownForm"
+          :row="row"
+          @created="handleBeforeCreated"
+          @close="handleCloseForm"
+        />
       </div>
 
-      <div class="kanban-column__actions">
-        <UiButton variant="ghost" adaptive>Добавить</UiButton>
+      <div class="kanban-column__actions" v-show="!shownForm">
+        <UiButton
+          @click="handleOpenForm"
+          variant="ghost"
+          adaptive
+        >
+          Добавить
+        </UiButton>
       </div>
     </div>
   </div>
