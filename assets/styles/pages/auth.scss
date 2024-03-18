@@ -1,0 +1,20 @@
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100%;
+
+  padding: 50px;
+
+  &__content {
+    color: white;
+    background: #2f3137;
+    padding: 20px;
+    width: 400px;
+  }
+
+  &__title {
+    margin-bottom: 36px;
+  }
+}
