@@ -1,3 +1,4 @@
+import { useAuthStore } from '~/store/authStore';
 import BadRequestError from '~/errors/BadRequestError';
 
 export interface payloadType {
@@ -10,14 +11,15 @@ interface apiOptions {
 }
 
 export const call = async (url: string, options: apiOptions = { method: 'GET' }): Promise<object> => {
+  const authStore= useAuthStore();
+
   const headers = {
     'Content-Type': 'application/json;charset=utf-8',
     Authorization: '',
   };
 
-  const authToken: string | null = localStorage.getItem('kanban.auth.access');
-  if (authToken) {
-    headers.Authorization = `JWT ${authToken}`;
+  if (authStore.access) {
+    headers.Authorization = `JWT ${authStore.access}`;
   }
 
   let uri = `https://trello.backend.tests.nekidaem.ru/api/v1/${url}/`;

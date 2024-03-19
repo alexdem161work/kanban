@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { login } from '~/api/auth';
-import { useUserStore } from '~/store/authStore';
+import { useAuthStore } from '~/store/authStore';
 
 import Form from '~/services/form';
 import BadRequestError from '~/errors/BadRequestError';
 
-const user = useUserStore();
+definePageMeta({
+  middleware: ['role-guest'],
+});
+
+const router = useRouter();
+const user = useAuthStore();
 
 const formData = ref(new Form({
   username: null,
@@ -17,6 +22,7 @@ const handleSubmit = async () => {
   try {
     const response = await login(formData.value.getValues());
     user.setAuth(response.refresh, response.access);
+    await router.push('/');
   } catch (error) {
     if (error instanceof BadRequestError) {
       formData.value.setErrors(error.getErrors());

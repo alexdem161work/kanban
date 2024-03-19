@@ -26,7 +26,6 @@ const value = computed({
     v-model="value"
     :placeholder="placeholder"
     class="form-textarea"
-    :readonly="readonly"
   />
 </template>
 

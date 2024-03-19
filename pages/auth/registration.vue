@@ -11,6 +11,10 @@ const formData = ref(new Form({
   password: null,
 }));
 
+definePageMeta({
+  middleware: ['role-guest'],
+});
+
 const router = useRouter();
 
 const handleSubmit = async () => {

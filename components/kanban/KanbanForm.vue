@@ -14,20 +14,21 @@ const props = defineProps<Props>();
 
 const formData = ref(new Form({
   row: props.row,
-  text: 'null',
+  text: null,
 }));
 
 const clearForm = () => {
   formData.value.fields.text = null;
 }
 
-const handleCancel = () => {
+const handleClose = () => {
   clearForm();
   emit('close');
 };
 
 const handleAddCard = async () => {
   await cards.createCard(formData.value.getValues());
+  handleClose();
 };
 </script>
 
@@ -40,7 +41,7 @@ const handleAddCard = async () => {
     />
     <template #actions>
       <UiButton type="submit">Добавить карточку</UiButton>
-      <UiButton variant="ghost" @click="handleCancel">X</UiButton>
+      <UiButton variant="ghost" @click="handleClose">X</UiButton>
     </template>
   </FormWrapper>
 </div>

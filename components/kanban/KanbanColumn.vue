@@ -40,6 +40,7 @@ const handleDragEnd = () => {
         />
 
         <KanbanForm
+          v-if="shownForm"
           :row="row"
           @close="handleCloseForm"
         />
