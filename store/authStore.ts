@@ -23,11 +23,9 @@ export const useAuthStore = defineStore({
 
     async refreshToken(): void {
       const cookiesAuthAccess = useCookie('auth.access');
-      console.log(cookiesAuthAccess.value);
       let accessToken = cookiesAuthAccess.value;
 
       const cookiesAuthRefresh = useCookie('auth.refresh');
-      console.log(cookiesAuthRefresh.value);
       const refreshToken = cookiesAuthRefresh.value;
 
       if (!accessToken) {

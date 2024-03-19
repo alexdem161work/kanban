@@ -63,8 +63,20 @@ export const useCardsStore = defineStore({
       this.$patch({ shuffleCard: card });
     },
 
+    shuffleRealtime(newRowNumber: string): void {
+      if (this.shuffleCard) {
+        const oldRow = this.columns.find((col) => col.row === this.shuffleCard.row);
+        const newRow = this.columns.find((col) => col.row === newRowNumber);
+
+        if (oldRow && newRow) {
+          oldRow.cards = oldRow.cards.filter(card => card.id !== this.shuffleCard.id);
+          newRow.cards.push(this.shuffleCard);
+        }
+      }
+    },
+
     async shuffleEnd(newRow: string) {
-      console.log(newRow);
+      this.shuffleRealtime(newRow);
 
       await updateCard(this.shuffleCard.id, {
         seq_num: this.shuffleCard.seq_num,
